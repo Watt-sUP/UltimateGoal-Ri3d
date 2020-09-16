@@ -53,6 +53,7 @@ public class DriverControled extends LinearOpMode {
             setFace(gaju.y, gaju.a, gaju.x, gaju.b);
             move(gaju.left_x, gaju.left_y, gaju.right_x, gaju.left_trigger.toButton(0.3), gaju.right_trigger.toButton(0.3), gaju.dpad_left, gaju.dpad_right);
             collect(duta.a);
+            shoot(duta.y, duta.x, duta.b);
 
             telemetry.update();
         }
@@ -84,8 +85,8 @@ public class DriverControled extends LinearOpMode {
         robot.collector.changeState(startCollector.pressed());
     }
 
-    private void shoot(Button startShooter, Button push) {
+    private void shoot(Button startShooter, Button pushLeft, Button pushRight) {
         robot.shooter.changeState(startShooter.pressed());
-        robot.shooter.pushRing(push.pressed());
+        robot.shooter.pushRing(pushLeft.pressed(), pushRight.pressed());
     }
 }

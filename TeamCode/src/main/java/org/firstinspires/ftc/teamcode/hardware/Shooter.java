@@ -8,8 +8,7 @@ public class Shooter {
     private DcMotor left, right;
     private Servo push;
 
-    private boolean on;
-    private double where;
+    private boolean on, pushing;
     private static final double MAX_POWER = 1.0;
 
     public Shooter(DcMotor _left, DcMotor _right, Servo _push) {
@@ -20,11 +19,11 @@ public class Shooter {
         on = false;
         left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
+        left.setDirection(DcMotorSimple.Direction.FORWARD);
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        where = 0.0;
-        push.setPosition(where);
+        push.setPosition(0.0);
+        pushing = false;
     }
 
     public void changeState(boolean change) {
@@ -40,14 +39,9 @@ public class Shooter {
         }
     }
 
-    public void pushRing(boolean change) {
-        if(change) {
-            if(where == 0.0)
-                where = 1.0;
-            else
-                where = 0.0;
-            push.setPosition(where);
-        }
+    public void pushRing(boolean goRight, boolean goLeft) {
+        if(goRight) push.setPosition(1.0);
+        else if(goLeft) push.setPosition(0.0);
+        // TODO: servo with one button
     }
-
 }
