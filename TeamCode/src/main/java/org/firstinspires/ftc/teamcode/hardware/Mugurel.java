@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -16,6 +17,7 @@ public class Mugurel {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
     public LinearOpMode opMode;
+    public ElapsedTime runtime;
 
      public void init() {
         runner = new Runner(
@@ -41,11 +43,13 @@ public class Mugurel {
         init();
     }
 
-    public Mugurel(HardwareMap hm, Telemetry t, LinearOpMode opmode) {
+    public Mugurel(HardwareMap hm, Telemetry t, LinearOpMode opmode, ElapsedTime _runtime) {
         hardwareMap = hm;
         telemetry = t;
         opMode = opmode;
+        runtime = _runtime;
         init();
+        shooter.runtime = runtime;
     }
 
     public void setTelemetry (Telemetry _t) { telemetry = _t; }

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 //@Disabled
 public class DriverControled extends LinearOpMode {
 
-    private ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime runtime = new ElapsedTime();
     private Mugurel robot;
 
     private GamepadEx gaju, duta;
@@ -23,7 +23,7 @@ public class DriverControled extends LinearOpMode {
     @Override
     public void runOpMode()  {
 
-        robot = new Mugurel(hardwareMap);
+        robot = new Mugurel(hardwareMap, telemetry, this, runtime);
         gaju = new GamepadEx(gamepad1);
         duta = new GamepadEx(gamepad2);
 
@@ -53,8 +53,10 @@ public class DriverControled extends LinearOpMode {
             setFace(gaju.y, gaju.a, gaju.x, gaju.b);
             move(gaju.left_x, gaju.left_y, gaju.right_x, gaju.left_trigger.toButton(0.3), gaju.right_trigger.toButton(0.3), gaju.dpad_left, gaju.dpad_right);
             collect(duta.a);
-            shoot(duta.y, duta.x, duta.b);
-
+            shoot(duta.y, duta.x);
+            telemetry.addData("Servo", robot.shooter.push.getPosition());
+            telemetry.addData("Left Shoot", robot.shooter.left.getCurrentPosition());
+            telemetry.addData("Right Shoot", robot.shooter.right.getCurrentPosition());
             telemetry.update();
         }
 
@@ -72,7 +74,7 @@ public class DriverControled extends LinearOpMode {
         if (smallPower != null && smallPower.raw) modifier = 0.23;
         if (mediumPower != null && mediumPower.raw)  modifier = 0.5;
 
-        final double drive_y = robot.runner.scalePower(ly.raw);
+        final double drive_y = -robot.runner.scalePower(ly.raw);
         final double drive_x = robot.runner.scalePower(lx.raw);
         final double turn = robot.runner.scalePower(rx.raw);
 
@@ -85,8 +87,8 @@ public class DriverControled extends LinearOpMode {
         robot.collector.changeState(startCollector.pressed());
     }
 
-    private void shoot(Button startShooter, Button pushLeft, Button pushRight) {
+    private void shoot(Button startShooter, Button push) {
         robot.shooter.changeState(startShooter.pressed());
-        robot.shooter.pushRing(pushLeft.pressed(), pushRight.pressed());
+        robot.shooter.pushRing(push.pressed());
     }
 }
