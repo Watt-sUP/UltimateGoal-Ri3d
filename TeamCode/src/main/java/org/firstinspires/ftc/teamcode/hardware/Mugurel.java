@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -31,8 +32,8 @@ public class Mugurel {
 
         shooter = new Shooter(
                  hardwareMap.get(DcMotor.class, Config.left_shoot),
-                 hardwareMap.get(DcMotor.class, Config.right_shoot),
-                 hardwareMap.get(Servo.class, Config.push)
+                 hardwareMap.get(CRServo.class, Config.push),
+                hardwareMap.get(Servo.class, Config.lift)
         );
     }
 
