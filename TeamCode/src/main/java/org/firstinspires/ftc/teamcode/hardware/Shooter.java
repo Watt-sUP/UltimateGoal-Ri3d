@@ -57,6 +57,7 @@ public class Shooter {
     }
 
     public void pushRing(boolean change) {
+        if( Math.abs(lift.getPosition() - POS_LIFT_DOWN) < 0.001 ) return;
         if(!pushing && change) {
             push.setPosition(POS_PUSH_RING);
             pushing = true;
