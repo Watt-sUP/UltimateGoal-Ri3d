@@ -19,6 +19,7 @@ public class Collector {
     public void changeState(boolean change) {
         if(change) {
             on = !on;
+            if(on)  reverse = false;
             if(on)  motor.setPower(MAX_POWER);
             else    motor.setPower(0.0);
         }
@@ -27,12 +28,16 @@ public class Collector {
     public void reverseCollector(boolean change){
         if(change){
           reverse = !reverse;
+          if(reverse) on = false;
           if(reverse) motor.setPower(-MAX_POWER);
           else        motor.setPower(0.0);
         }
     }
 
     public void setState(double power) {
+        if(power < -0.001)  reverse = true;
+        else if(power > 0.001)  on = true;
+        else    reverse = on = false;
         motor.setPower(MAX_POWER * power);
     }
 }

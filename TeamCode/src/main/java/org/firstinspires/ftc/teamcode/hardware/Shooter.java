@@ -14,10 +14,10 @@ public class Shooter {
     private static final double MAX_POWER = 1.0;
     private static final double MAX_TIME = 788;
 
-    private static final double POS_LIFT_DOWN = 0.75;
-    private static final double POS_LIFT_UP = 0.47;
+    private static final double POS_LIFT_DOWN = 0.73;
+    private static final double POS_LIFT_UP = 0.40;
 
-    private static final double POS_ANGLE_TOWER = 0.4;
+    private static final double POS_ANGLE_TOWER = 0.35;
     private static final double POS_ANGLE_POWERSHOT = 0.9;
 
     private static final double POS_PUSH_RING = 0.7;
@@ -35,6 +35,8 @@ public class Shooter {
         pushing = false;
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lift.setPosition(POS_LIFT_DOWN);
+
+        push.setPosition(POS_PUSH_RESET);
 
         tower = true;
         angleChanger.setPosition(POS_ANGLE_TOWER);
@@ -54,6 +56,8 @@ public class Shooter {
 
     public void setState(double power) {
         motor.setPower(MAX_POWER * power);
+        if(power < 0.001)   on = false;
+        else                on = true;
     }
 
     public void pushRing(boolean change) {
