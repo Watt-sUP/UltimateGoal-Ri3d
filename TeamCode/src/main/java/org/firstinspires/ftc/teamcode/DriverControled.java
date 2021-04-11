@@ -116,21 +116,18 @@ public class DriverControled extends LinearOpMode {
     }
 
     private void shoot(Button startShooter, Button push, Button up, Button down) {
-        boolean upPressed = up.pressed();
-        boolean downPressed = down.pressed();
-
         robot.shooter.changeState(startShooter.pressed());
         robot.shooter.pushRing(push.pressed());
-        robot.shooter.Up(up.pressed());
-        robot.shooter.Down(down.pressed());
+//        robot.shooter.Up(up.pressed());
+//        robot.shooter.Down(down.pressed());
 
-        if(upPressed) {
+        if(up.pressed()) {
             robot.shooter.Up(true);
             robot.collector.setState(0.0);
             robot.shooter.setState(1.0);
         }
 
-        if(downPressed) {
+        if(down.pressed()) {
             robot.shooter.Down(true);
             robot.shooter.setState(0.0);
             robot.collector.setState(1.0);
