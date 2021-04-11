@@ -13,7 +13,7 @@ public class Collector {
         reverse = false;
         motor = _motor;
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void changeState(boolean change) {
@@ -27,8 +27,12 @@ public class Collector {
     public void reverseCollector(boolean change){
         if(change){
           reverse = !reverse;
-          if(reverse) motor.setPower(-1.0);
+          if(reverse) motor.setPower(-MAX_POWER);
           else        motor.setPower(0.0);
         }
+    }
+
+    public void setState(double power) {
+        motor.setPower(MAX_POWER * power);
     }
 }

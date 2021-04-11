@@ -4,13 +4,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.gamepad.Axis;
 import org.firstinspires.ftc.teamcode.gamepad.Button;
 import org.firstinspires.ftc.teamcode.gamepad.GamepadEx;
-import org.firstinspires.ftc.teamcode.hardware.Config;
 import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 
 @TeleOp(name="Driver Controled" , group="Linear Opmode")
@@ -18,24 +16,24 @@ import org.firstinspires.ftc.teamcode.hardware.Mugurel;
 public class DriverControled extends LinearOpMode {
 
     public ElapsedTime runtime = new ElapsedTime();
-    public Servo lift, servo1;
-    public DcMotor rot;
+//    public Servo lift, servo1;
+//    public DcMotor rot;
     private Mugurel robot;
 
-    private GamepadEx gaju, duta;
+    private GamepadEx gaju, andrei;
 
     @Override
     public void runOpMode()  {
 
         robot = new Mugurel(hardwareMap, telemetry, this, runtime);
 
-        lift = hardwareMap.get(Servo.class, Config.lift);
-        rot = hardwareMap.get(DcMotor.class, Config.rotBrat);
-        servo1 = hardwareMap.get(Servo.class, Config.stransBrat);
+//        lift = hardwareMap.get(Servo.class, Config.lift);
+//        rot = hardwareMap.get(DcMotor.class, Config.rotBrat);
+//        servo1 = hardwareMap.get(Servo.class, Config.stransBrat);
 
 
         gaju = new GamepadEx(gamepad1);
-        duta = new GamepadEx(gamepad2);
+        andrei = new GamepadEx(gamepad2);
 
        // robot.setOpmode(this);
 
@@ -51,39 +49,41 @@ public class DriverControled extends LinearOpMode {
         robot.runner.setFace(0);
         robot.runner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        lift.setPosition(0.69);
+//        lift.setPosition(0.69);
 
         waitForStart();
         // run until the end of the match (driver presses STOP)
 
         while (opModeIsActive()){
             gaju.update();
-            duta.update();
+            andrei.update();
 
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
             setFace(gaju.y, gaju.a, gaju.x, gaju.b);
             move(gaju.left_x, gaju.left_y, gaju.right_x, gaju.left_trigger.toButton(0.3), gaju.right_trigger.toButton(0.3), gaju.dpad_left, gaju.dpad_right);
-            collect(duta.a, duta.b);
-            shoot(duta.y, duta.x, duta.dpad_up, duta.dpad_down);
+            collect(andrei.b, andrei.a);
+            shoot(andrei.y, andrei.x, andrei.dpad_up, andrei.dpad_down);
+            angleChange(andrei.right_bumper);
+            woobleClaw(andrei.left_y, andrei.left_bumper);
 
-            rot.setPower(duta.left_y.raw);
+//            rot.setPower(andrei.left_y.raw);
+//
+//           if(andrei.dpad_left.pressed())
+//              servo1.setPosition(1.0);
+//
+//           if (andrei.dpad_right.pressed())
+//               servo1.setPosition(0.0);
 
-           if(duta.dpad_left.pressed())
-              servo1.setPosition(1.0);
-
-           if (duta.dpad_right.pressed())
-               servo1.setPosition(0.0);
-
-         /*if(duta.dpad_up.pressed())
+         /*if(andrei.dpad_up.pressed())
              lift.setPosition(0.20);
 
-          if(duta.dpad_down.pressed())
+          if(andrei.dpad_down.pressed())
              lift.setPosition(0.69);
 */
 
-            telemetry.addData("Servo", lift.getPosition());
-            telemetry.addData("Left Shoot", robot.shooter.left.getCurrentPosition());
+//            telemetry.addData("Servo", lift.getPosition());
+            telemetry.addData("Left Shoot", robot.shooter.motor.getCurrentPosition());
             telemetry.update();
         }
 
@@ -116,9 +116,33 @@ public class DriverControled extends LinearOpMode {
     }
 
     private void shoot(Button startShooter, Button push, Button up, Button down) {
+        boolean upPressed = up.pressed();
+        boolean downPressed = down.pressed();
+
         robot.shooter.changeState(startShooter.pressed());
         robot.shooter.pushRing(push.pressed());
         robot.shooter.Up(up.pressed());
         robot.shooter.Down(down.pressed());
+
+        if(upPressed) {
+            robot.shooter.Up(true);
+            robot.collector.setState(0.0);
+            robot.shooter.setState(1.0);
+        }
+
+        if(downPressed) {
+            robot.shooter.Down(true);
+            robot.shooter.setState(0.0);
+            robot.collector.setState(1.0);
+        }
+    }
+
+    private void angleChange(Button angleChange) {
+        robot.shooter.changeAngleState(angleChange.pressed());
+    }
+
+    private void woobleClaw(Axis rotate, Button grab) {
+        robot.claw.changeState(grab.pressed());
+        robot.claw.setRotatePower(-rotate.raw);
     }
 }

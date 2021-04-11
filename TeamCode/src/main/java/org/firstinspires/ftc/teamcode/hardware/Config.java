@@ -16,4 +16,6 @@ public class Config {
     public static final String lift = "lift";
 
     public static final String collector = "col";
+
+    public static final String angleChanger = "defl";
 }

@@ -14,6 +14,7 @@ public class Mugurel {
     public Runner runner;
     public Collector collector;
     public Shooter shooter;
+    public WobbleClaw claw;
 
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
@@ -31,9 +32,15 @@ public class Mugurel {
         collector = new Collector(hardwareMap.get(DcMotor.class, Config.collector));
 
         shooter = new Shooter(
-                 hardwareMap.get(DcMotor.class, Config.left_shoot),
-                 hardwareMap.get(CRServo.class, Config.push),
-                hardwareMap.get(Servo.class, Config.lift)
+                hardwareMap.get(DcMotor.class, Config.left_shoot),
+                hardwareMap.get(Servo.class, Config.push),
+                hardwareMap.get(Servo.class, Config.lift),
+                hardwareMap.get(Servo.class, Config.angleChanger)
+        );
+
+        claw = new WobbleClaw(
+               hardwareMap.get(DcMotor.class, Config.rotBrat),
+               hardwareMap.get(Servo.class, Config.stransBrat)
         );
     }
 
